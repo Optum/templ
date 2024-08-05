@@ -1,9 +1,11 @@
-<Insert Project Name Here>
+Templ
 Copyright 2024 Optum
 
 Project Description:
 ====================
-<Short description of your project>
+This library provides a simple solution to a common use case in configuration variables. Typically, a delimiter
+is needed to accompany optional data, but must not be present when the optional data is missing. This library
+handles the substitution processing.
 
 Author(s):
-<List the names and GitHub IDs of the original project authors>
+John Thayer - JohnMThayer
