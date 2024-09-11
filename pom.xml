@@ -13,7 +13,7 @@
     <description>A tiny templating library</description>
 
     <modules>
-        <module>lib</module>
+        <module>templ-lib</module>
     </modules>
 
     <properties>
