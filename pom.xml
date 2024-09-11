@@ -32,6 +32,9 @@
         <groovy-eclipse-batch.version>2.4.21-01</groovy-eclipse-batch.version>
         <groovy-eclipse-compiler.version>2.9.2-01</groovy-eclipse-compiler.version>
 
+        <!-- PLUGIN PROPERTY OVERRIDES -->
+        <flatten.mode>ossrh</flatten.mode> <!-- flatten-maven-plugin -->
+
     </properties>
 
     <build>
@@ -62,6 +65,37 @@
                     <artifactId>groovy-eclipse-compiler</artifactId>
                     <version>${groovy-eclipse-compiler.version}</version>
                     <extensions>true</extensions>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>3.0.1</version>
+                    <executions>
+                        <execution>
+                            <id>sign-artifacts</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>sign</goal>
+                            </goals>
+                            <configuration>
+                                <gpgArguments>
+                                    <arg>--pinentry-mode</arg>
+                                    <arg>loopback</arg>
+                                </gpgArguments>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.sonatype.plugins</groupId>
+                    <artifactId>nexus-staging-maven-plugin</artifactId>
+                    <version>1.6.8</version>
+                    <extensions>true</extensions>
+                    <configuration>
+                        <serverId>ossrh</serverId>
+                        <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                        <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        <stagingProfileId>d56a306692c92</stagingProfileId>
+                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -154,5 +188,75 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+
+        <!-- DEFAULT: ALWAYS ACTIVE -->
+        <profile>
+            <id>default</id>
+            <activation>
+                <file>
+                    <exists>pom.xml</exists>
+                </file>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>flatten-maven-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- DEVELOPMENT: TEST -->
+        <profile>
+            <id>dev.test</id>
+            <properties>
+                <enforcer.skip>true</enforcer.skip> <!-- maven-enforcer-plugin -->
+            </properties>
+        </profile>
+
+        <!-- CI: BUILD -->
+        <profile>
+            <id>ci.build</id>
+            <activation>
+                <property>
+                    <name>ci.build</name>
+                </property>
+            </activation>
+        </profile>
+
+        <!-- CI: DEPLOY -->
+        <profile>
+            <id>ci.deploy</id>
+            <activation>
+                <property>
+                    <name>ci.deploy</name>
+                </property>
+            </activation>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>ossrh</id>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+                </snapshotRepository>
+            </distributionManagement>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+    </profiles>
 
 </project>
