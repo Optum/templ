@@ -52,8 +52,8 @@ jobs:
           server-id: ossrh
           server-username: ${{ secrets.OSSRH_USERNAME}}
           server-password: ${{ secrets.OSSRH_PASSWORD}}
-#          gpg-private-key: ${{ secrets.SONATYPE_GPG_PRIVATE_KEY }}
-#          gpg-passphrase: ${{ secrets.SONATYPE_GPG_PASSPHRASE }}
+          gpg-private-key: ${{ secrets.SONATYPE_GPG_PRIVATE_KEY }}
+          gpg-passphrase: ''
       - name: Build Maven Project
         if: success() && (github.event_name == 'pull_request' || (github.event_name == 'push' && matrix.java != env.PRIMARY_JAVA_VERSION))
         run: ./mvnw --batch-mode install -D ci.build
