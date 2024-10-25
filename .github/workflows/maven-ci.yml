@@ -53,17 +53,17 @@ jobs:
           server-username: ${{ secrets.OSSRH_USERNAME}}
           server-password: ${{ secrets.OSSRH_PASSWORD}}
           gpg-private-key: ${{ secrets.SONATYPE_GPG_PRIVATE_KEY }}
-          gpg-passphrase: ''
+          gpg-passphrase: SONATYPE_GPG_PASSPHRASE
       - name: Build Maven Project
         if: success() && (github.event_name == 'pull_request' || (github.event_name == 'push' && matrix.java != env.PRIMARY_JAVA_VERSION))
         run: ./mvnw --batch-mode install -D ci.build
       - name: Build Maven Project and Deploy to Sonatype OSSRH
         if: success() && (github.event_name == 'push' && matrix.java == env.PRIMARY_JAVA_VERSION)
         run: ./mvnw --batch-mode deploy -D ci.deploy
-#        env:
-#          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-#          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
-#          SONATYPE_GPG_PASSPHRASE: ${{ secrets.SONATYPE_GPG_PASSPHRASE }}
+        env:
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          SONATYPE_GPG_PASSPHRASE: ${{ secrets.SONATYPE_GPG_PASSPHRASE }}
       - name: Publish Test Report
         if: always()
         continue-on-error: true
