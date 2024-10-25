@@ -50,8 +50,8 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
           server-id: ossrh
-          server-username: SONATYPE_USERNAME
-          server-password: SONATYPE_PASSWORD
+          server-username: OSSRH_USERNAME
+          server-password: OSSRH_PASSWORD
           gpg-private-key: ${{ secrets.SONATYPE_GPG_PRIVATE_KEY }}
           gpg-passphrase: SONATYPE_GPG_PASSPHRASE
       - name: Build Maven Project
