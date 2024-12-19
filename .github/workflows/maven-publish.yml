@@ -22,13 +22,7 @@ jobs:
       - name: Set version
         run: ./mvnw versions:set -DnewVersion=${{ github.event.release.tag_name }}
       - name: Publish package
-        run: ./mvnw --batch-mode deploy -DskipTests
-        env:
-          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
-          SONATYPE_GPG_PASSPHRASE: ${{ secrets.SONATYPE_GPG_PASSPHRASE }}
-      - name: Release package
-        run: ./mvnw --batch-mode release:perform
+        run: ./mvnw -P release --batch-mode deploy -DskipTests
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
