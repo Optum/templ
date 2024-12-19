@@ -20,9 +20,9 @@ jobs:
           gpg-private-key: ${{ secrets.SONATYPE_GPG_PRIVATE_KEY }}
           gpg-passphrase: SONATYPE_GPG_PASSPHRASE
       - name: Set version
-        run: mvn versions:set -DnewVersion=${{ github.event.release.tag_name }}
+        run: ./mvnw versions:set -DnewVersion=${{ github.event.release.tag_name }}
       - name: Publish package
-        run: mvn --batch-mode deploy -DskipTests
+        run: ./mvnw --batch-mode deploy -DskipTests
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
