@@ -105,6 +105,7 @@
                         <serverId>ossrh</serverId>
                         <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                         <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        <stagingProfileId>d56a306692c92</stagingProfileId>
                     </configuration>
                 </plugin>
             </plugins>
