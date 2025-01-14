@@ -13,6 +13,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
+    <name>templ-lib</name>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
