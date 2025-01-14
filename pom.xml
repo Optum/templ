@@ -16,6 +16,39 @@
         <module>templ-lib</module>
     </modules>
 
+    <organization>
+        <name>Optum</name>
+        <url>https://optum.github.io/</url>
+    </organization>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>JohnMThayer</id>
+            <name>John Thayer</name>
+            <email>john.thayer@optum.com</email>
+            <organization>Optum</organization>
+            <roles>
+                <role>Project Lead</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <url>https://github.com/optum/templ</url>
+
+    <scm>
+        <url>https://github.com/optum/templ</url>
+        <connection>scm:git:https://github.com/optum/templ.git</connection>
+        <developerConnection>scm:git:git@github.com:optum/templ.git</developerConnection>
+    </scm>
+
     <properties>
         <!-- JAVA VERSION -->
         <java.version>11</java.version>
@@ -174,6 +207,36 @@
                         <include>**/*Spec.*</include>
                     </includes>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.3.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <release>${java.version}</release>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
