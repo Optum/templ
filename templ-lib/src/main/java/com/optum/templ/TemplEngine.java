@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 public class TemplEngine {
     private static final String EMPTY_STRING = "";
     private static final String TO_UPPER_COMMAND_PREFIX = "^";
+    private static final String TO_LOWER_COMMAND_PREFIX = "~";
 
     private static final String TEMPLATE_CANARY = "{{";
     /**
@@ -27,7 +28,7 @@ public class TemplEngine {
      *   \ needs to be Regex escaped with a backslash.  Java has to escape BOTH backslashes.  So it becomes \\\\
      */
     private static final String DELIMITERS = "[ ,.;:?&@#/()<>_\\-\\\\|]";
-    private static final Pattern PREFIX_PATTERN = Pattern.compile("^(" + DELIMITERS + "*)(\\^?)");
+    private static final Pattern PREFIX_PATTERN = Pattern.compile("^(" + DELIMITERS + "*)([\\^~]?)");
     private static final Pattern SUFFIX_PATTERN = Pattern.compile("(" + DELIMITERS + "+)$");
 
     final TemplDataSource dataSource;
@@ -73,14 +74,17 @@ public class TemplEngine {
     private String resolveTemplateFragment(String template) throws TemplException {
         final String prefix;
         final boolean uppercase;
+        final boolean lowercase;
         Matcher prefixMatcher = PREFIX_PATTERN.matcher(template);
         if (prefixMatcher.find())  {
             prefix = prefixMatcher.group(1);
             uppercase = TO_UPPER_COMMAND_PREFIX.equals(prefixMatcher.group(2));
-            template = template.substring(prefix.length()+(uppercase?1:0));
+            lowercase = TO_LOWER_COMMAND_PREFIX.equals(prefixMatcher.group(2));
+            template = template.substring(prefix.length()+((uppercase||lowercase)?1:0));
         } else {
             prefix = EMPTY_STRING;
             uppercase = false;
+            lowercase = false;
         }
 
         final String suffix;
@@ -100,7 +104,17 @@ public class TemplEngine {
                 throw new MissingKeyTemplException(template);
             }
         } else if (!result.isEmpty()) {
-            return prefix + (uppercase ? result.toUpperCase() : result) + suffix;
+            StringBuilder sb = new StringBuilder();
+            sb.append(prefix);
+            if (uppercase) {
+                sb.append(result.toUpperCase().replace("-","_"));
+            } else if (lowercase) {
+                sb.append(result.toLowerCase().replace("_","-"));
+            } else {
+                sb.append(result);
+            }
+            sb.append(suffix);
+            return sb.toString();
         } else {
             return EMPTY_STRING;
         }
