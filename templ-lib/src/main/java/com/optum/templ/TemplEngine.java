@@ -107,7 +107,7 @@ public class TemplEngine {
             StringBuilder sb = new StringBuilder();
             sb.append(prefix);
             if (uppercase) {
-                sb.append(result.toUpperCase().replace("-","_"));
+                sb.append(result.toUpperCase().replace("-","_").replace(".", "_"));
             } else if (lowercase) {
                 sb.append(result.toLowerCase().replace("_","-"));
             } else {

@@ -192,7 +192,7 @@ class TemplEngineSpec extends Specification {
     def "Template Substitution Supports Uppercase Results" () {
         when:
         map.clear()
-        map.put("ENV", "dev-a_b")
+        map.put("ENV", "dev-a_b.c")
         TemplEngine te = new TemplEngine(ds)
         String result = te.processTemplate(template)
 
@@ -201,11 +201,11 @@ class TemplEngineSpec extends Specification {
 
         where:
         template        | expected
-        'A{{^ENV}}Z'    | 'ADEV_A_BZ'
-        'A{{.^ENV}}Z'   | 'A.DEV_A_BZ'
-        'A{{.__^ENV}}Z' | 'A.__DEV_A_BZ'
-        'A{{^ENV.}}Z'   | 'ADEV_A_B.Z'
-        'A{{.^ENV.}}Z'  | 'A.DEV_A_B.Z'
+        'A{{^ENV}}Z'    | 'ADEV_A_B_CZ'
+        'A{{.^ENV}}Z'   | 'A.DEV_A_B_CZ'
+        'A{{.__^ENV}}Z' | 'A.__DEV_A_B_CZ'
+        'A{{^ENV.}}Z'   | 'ADEV_A_B_C.Z'
+        'A{{.^ENV.}}Z'  | 'A.DEV_A_B_C.Z'
     }
 
     def "Template Substitution Supports Lowercase Results" () {
